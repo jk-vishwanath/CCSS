@@ -2,9 +2,18 @@ import streamlit as st
 import pickle
 import pandas as pd
 import nltk
+import string
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
-import string
+
+# Ensure the app looks in the local nltk_data folder
+nltk.data.path.append('./nltk_data')
+
+# Download necessary NLTK resources (only if not already downloaded)
+nltk.download('punkt', download_dir='./nltk_data')
+nltk.download('stopwords', download_dir='./nltk_data')
+nltk.download('wordnet', download_dir='./nltk_data')
+nltk.download('punkt_tab', download_dir='./nltk_data')
 
 # Load pre-trained model and vectorizer
 with open("knn_model.pkl", "rb") as knn_file:
@@ -17,12 +26,8 @@ with open("tfidf_vectorizer.pkl", "rb") as vectorizer_file:
 data = pd.read_csv("https://raw.githubusercontent.com/jk-vishwanath/CCSS/refs/heads/main/ccss.csv")
 
 # Preprocessing function
-nltk.download("punkt")
-nltk.download("stopwords")
-nltk.download("wordnet")
 lemmatizer = WordNetLemmatizer()
 stop_words = set(stopwords.words("english"))
-
 
 def preprocess_text(text):
     text = text.lower()
@@ -30,7 +35,6 @@ def preprocess_text(text):
     tokens = nltk.word_tokenize(text)
     tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words]
     return " ".join(tokens)
-
 
 # Streamlit app
 st.title("CCSS Code Alignment Tool")
