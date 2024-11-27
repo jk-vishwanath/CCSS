@@ -2,3 +2,8 @@ Flask
 scikit-learn
 nltk
 pandas
+nltk==3.8.1
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('punkt_tab')
