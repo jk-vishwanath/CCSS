@@ -10,7 +10,7 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 # Load the dataset
-file_path = r'C:\Users\JKVish\api_2\ccss.csv'  # Replace with your correct file path
+file_path = r'https://raw.githubusercontent.com/jk-vishwanath/CCSS/refs/heads/main/ccss.csv'  # Replace with your correct file path
 data = pd.read_csv(file_path)
 
 # Download NLTK resources
