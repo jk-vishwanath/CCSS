@@ -2,5 +2,5 @@ Flask
 scikit-learn
 nltk
 pandas
-streamlit==1.25.0
-requests==2.31.0
+streamlit
+requests
