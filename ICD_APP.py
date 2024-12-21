@@ -7,11 +7,16 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import string
 
-# Download necessary NLTK resources
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
-nltk.download('omw-1.4')  # To fix lemmatizer issues
+
+# Ensure the app looks in the local nltk_data folder
+nltk.data.path.append('./nltk_data')
+
+# Download necessary NLTK resources (only if not already downloaded)
+nltk.download('punkt', download_dir='./nltk_data')
+nltk.download('stopwords', download_dir='./nltk_data')
+nltk.download('wordnet', download_dir='./nltk_data')
+nltk.download('punkt_tab', download_dir='./nltk_data')
+nltk.download('omw-1.4', download_dir='./nltk_data')  # To fix lemmatizer issues
 
 # Load the dataset
 file_path = r'https://raw.githubusercontent.com/jk-vishwanath/Cotiviti_POC/refs/heads/main/Code_with_ouput_and_dataset/icd.csv'  # Replace with your correct file path
