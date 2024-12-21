@@ -1,38 +1,21 @@
 import streamlit as st
-import pickle
+import pandas as pd
 import nltk
-import os
-from io import BytesIO
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.neighbors import NearestNeighbors
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import string
-import pandas as pd
-import requests
 
 # Download necessary NLTK resources
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
+nltk.download('omw-1.4')  # To fix lemmatizer issues
 
-# Path to the pickle file (ensure it's publicly accessible)
-pickle_url = "https://raw.githubusercontent.com/jk-vishwanath/Cotiviti_POC/main/Code_with_ouput_and_dataset/model.pkl"
-
-# Function to load the pickle file
-def load_model(pickle_url):
-    response = requests.get(pickle_url)
-    if response.status_code == 200:
-        pickle_data = BytesIO(response.content)
-        return pickle.load(pickle_data)
-    else:
-        st.error("Failed to load the model. Check the URL or your internet connection.")
-        return None
-
-# Load the model
-export_data = load_model(pickle_url)
-if export_data:
-    vectorizer = export_data['vectorizer']
-    knn = export_data['knn_model']
-    data = export_data['dataset']
+# Load the dataset
+file_path = r'C:\Users\JKVish\api_3\icd.csv'  # Replace with your correct file path
+data = pd.read_csv(file_path, encoding='ISO-8859-1')
 
 # Text preprocessing function
 def preprocess_text(text):
@@ -44,7 +27,18 @@ def preprocess_text(text):
     tokens = [lemmatizer.lemmatize(word) for word in tokens if word not in stop_words]
     return ' '.join(tokens)
 
-# Predict function
+# Apply preprocessing to the 'description' column
+data['processed_description'] = data['description'].apply(preprocess_text)
+
+# Feature extraction using TF-IDF
+vectorizer = TfidfVectorizer()
+X = vectorizer.fit_transform(data['processed_description'])
+
+# Train KNN model
+knn = NearestNeighbors(n_neighbors=5, metric='cosine')
+knn.fit(X)
+
+# Function to get the closest N ICD codes
 def get_closest_icd_codes(input_text, N):
     input_text_processed = preprocess_text(input_text)
     input_vector = vectorizer.transform([input_text_processed])
