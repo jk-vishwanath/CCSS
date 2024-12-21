@@ -14,7 +14,7 @@ nltk.download('wordnet')
 nltk.download('omw-1.4')  # To fix lemmatizer issues
 
 # Load the dataset
-file_path = r'C:\Users\JKVish\api_3\icd.csv'  # Replace with your correct file path
+file_path = r'https://raw.githubusercontent.com/jk-vishwanath/Cotiviti_POC/refs/heads/main/Code_with_ouput_and_dataset/icd.csv'  # Replace with your correct file path
 data = pd.read_csv(file_path, encoding='ISO-8859-1')
 
 # Text preprocessing function
